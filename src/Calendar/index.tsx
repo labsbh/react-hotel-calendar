@@ -1,16 +1,20 @@
 import clsx from 'clsx';
 import { addMonths, differenceInCalendarMonths, startOfMonth, subMonths, } from 'date-fns';
 import React, { ReactElement, useContext, useEffect, useState } from 'react';
-import { breakpoints } from '../device';
-import { useBreakpointsUp } from '../hooks';
+import { useIntersectionObserverRef } from 'rooks';
 import Month from '../Month';
 import { OptionCtx } from '../Store';
 import Tooltip from '../Tooltip';
 import { DatePickerInner, Months, Wrapper } from './styled';
 
 const Calendar = (): ReactElement => {
-    const responsive = useBreakpointsUp(breakpoints);
-    const { laptop } = responsive;
+    const [laptop, setLaptop] = useState(false);
+    const [secondMonthRef] = useIntersectionObserverRef((entries) => {
+        if (entries && entries[0]) {
+            setLaptop(entries[0].isIntersecting);
+        }
+    });
+
     const { startDate, endDate, moveBothMonths } =
         useContext(OptionCtx);
 
@@ -86,6 +90,7 @@ const Calendar = (): ReactElement => {
                                     setFirstMonth(addMonths(firstMonth, 1));
                                 }
                             }}
+                            ref={secondMonthRef}
                         />
                         <Tooltip />
                     </Months>

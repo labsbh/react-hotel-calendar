@@ -14,8 +14,7 @@ const Wrapper = styled.section`
   height: auto;
   left: 0;
   line-height: ${(props): string => props.theme.calendar.lineHeight};
-  overflow: hidden;
-  position: absolute;
+  position: relative;
   transition: transform ${(props): string => props.theme.animationSpeed} ease;
   transform: scaleY(1);
   transform-origin: 50% 0;
@@ -40,7 +39,6 @@ const Wrapper = styled.section`
 `;
 
 const DatePickerInner = styled.div`
-  overflow: hidden;
   padding: ${(props): string => props.theme.calendar.padding};
 `;
 

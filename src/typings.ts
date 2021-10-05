@@ -1,5 +1,6 @@
 import { Locale } from 'date-fns';
 import { ReactElement, RefObject } from 'react';
+import { CallbackRef } from 'rooks/dist/esm/utils/utils';
 import { enTranslations as translations } from './translations';
 
 export interface HotelCalendarTheme {

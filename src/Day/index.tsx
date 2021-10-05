@@ -32,6 +32,7 @@ const Day = (props: DayProps): ReactElement => {
     'no-checkin': isNoCheckIn,
     'no-checkout': isNoCheckOut,
     'day-of-week-disable': isDayOfWeekDisabled,
+    'rhc-day': true,
   });
   const ref = useRef<HTMLTableDataCellElement>(null);
 

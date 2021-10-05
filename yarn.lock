@@ -13185,6 +13185,14 @@ rollup@^2.57.0:
   optionalDependencies:
     fsevents "~2.3.2"
 
+rooks@^5.7.1:
+  version "5.7.1"
+  resolved "https://registry.yarnpkg.com/rooks/-/rooks-5.7.1.tgz#a9c91e94e760e21a9df5afc1de4ba07d09a6156d"
+  integrity sha512-Gztycgm+e+bS0vqLMSGlGe8f7rkXMxjfPj3FucM06/xu1CEFQx1pZ0zMVdWVxDeMXRePaQ2/g1K7ArIlGKyHbQ==
+  dependencies:
+    lodash.debounce "^4.0.8"
+    raf "^3.4.1"
+
 rsvp@^4.8.4:
   version "4.8.5"
   resolved "https://registry.yarnpkg.com/rsvp/-/rsvp-4.8.5.tgz#c8f155311d167f68f21e168df71ec5b083113734"

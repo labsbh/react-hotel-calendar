@@ -298,7 +298,7 @@ var Day = function (props) {
         _a));
     var ref = React.useRef(null);
     var isHover = false;
-    var handleDayClick = React.useCallback(function (day, isNoCheckIn, isNoCheckOut) {
+    var handleDayClick = React.useCallback(function (day) {
         if (!day.isValid) {
             return;
         }
@@ -311,7 +311,7 @@ var Day = function (props) {
         }
         setDayHover(__assign(__assign({}, day), { ref: ref }));
     }, [setDayHover]);
-    return (jsxRuntime.jsx(DayWrapper, __assign({ hover: isHover, className: classes, onClick: function () { return handleDayClick(props, isNoCheckIn, isNoCheckOut); }, onMouseEnter: function () {
+    return (jsxRuntime.jsx(DayWrapper, __assign({ hover: isHover, className: classes, onClick: function () { return handleDayClick(props); }, onMouseEnter: function () {
             return handleDayHover(props);
         }, ref: ref }, { children: date.getDate() }), void 0));
 };
@@ -683,7 +683,8 @@ var HotelCalendar = function (props) {
         });
     }
     var optionContext = __assign(__assign({}, contextProps), { disabledDates: disabledDates.sort(function (a, b) { return a.getTime() - b.getTime(); }), locale: locale });
-    var localeCode = locale.code || 'en';
+    var i18next = reactI18next.useTranslation().i18n;
+    var localeCode = i18next.language || 'en';
     var calendarContext = {
         dayHover: dayHover,
         setDayHover: function (value) { return setDayHover(value); },
@@ -691,12 +692,9 @@ var HotelCalendar = function (props) {
     var wrapperRef = React.useRef(null);
     var mergedTheme = ___default["default"].defaultsDeep(theme$1, theme);
     React.useEffect(function () {
-        i18n__default["default"].languages = [localeCode];
-        i18n__default["default"].addResourceBundle(localeCode, 'hotelcalendar', i18n);
-        // noinspection JSIgnoredPromiseFromCall
-        i18n__default["default"].changeLanguage(localeCode);
-    }, [localeCode, i18n]);
-    return (jsxRuntime.jsx(reactI18next.I18nextProvider, __assign({ i18n: i18n__default["default"], defaultNS: "hotelcalendar" }, { children: jsxRuntime.jsx(styled.ThemeProvider, __assign({ theme: mergedTheme }, { children: jsxRuntime.jsx(OptionCtx.Provider, __assign({ value: optionContext }, { children: jsxRuntime.jsx(CalendarCtx.Provider, __assign({ value: calendarContext }, { children: jsxRuntime.jsx(Wrapper$1, __assign({ ref: wrapperRef }, { children: jsxRuntime.jsx(Calendar, {}, void 0) }), void 0) }), void 0) }), void 0) }), void 0) }), void 0));
+        i18next.addResourceBundle(localeCode, 'hotelcalendar', i18n);
+    }, [localeCode, i18next, i18n]);
+    return (jsxRuntime.jsx(styled.ThemeProvider, __assign({ theme: mergedTheme }, { children: jsxRuntime.jsx(OptionCtx.Provider, __assign({ value: optionContext }, { children: jsxRuntime.jsx(CalendarCtx.Provider, __assign({ value: calendarContext }, { children: jsxRuntime.jsx(Wrapper$1, __assign({ ref: wrapperRef }, { children: jsxRuntime.jsx(Calendar, {}, void 0) }), void 0) }), void 0) }), void 0) }), void 0));
 };
 
 exports.HotelCalendar = HotelCalendar;

@@ -1,10 +1,11 @@
 import { fr, enUS } from 'date-fns/locale';
 import * as React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { I18nextProvider } from 'react-i18next';
 import { theme } from '../stories/styled';
 
 import HotelCalendar from './HotelCalendar';
-import { enTranslations, frTranslations } from '../translations';
+import { enTranslations, frTranslations, i18nConfig } from '../translations';
 
 export default {
     title: 'Example/HotelCalendar',
@@ -87,7 +88,7 @@ export default {
     },
 } as ComponentMeta<typeof HotelCalendar>;
 
-const Template: ComponentStory<typeof HotelCalendar> = (args) => <HotelCalendar {...args} />;
+const Template: ComponentStory<typeof HotelCalendar> = (args) => <I18nextProvider i18n={i18nConfig} defaultNS="hotelcalendar"><HotelCalendar {...args} /></I18nextProvider>;
 
 export const Default = Template.bind({});
 Default.args = {};

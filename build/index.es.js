@@ -2,7 +2,7 @@ import { jsx, jsxs } from 'react/jsx-runtime';
 import { differenceInCalendarDays, isSameDay, format, startOfMonth, subDays, addDays, isSameMonth, differenceInMilliseconds, subMonths, addMonths, differenceInCalendarMonths, closestTo, isAfter, differenceInDays, eachDayOfInterval } from 'date-fns';
 import _ from 'lodash';
 import React, { useState, useEffect, createContext, useContext, useRef, useCallback } from 'react';
-import { useTranslation, Trans, initReactI18next, I18nextProvider } from 'react-i18next';
+import { useTranslation, Trans, initReactI18next } from 'react-i18next';
 import styled, { ThemeProvider } from 'styled-components';
 import clsx from 'clsx';
 import { enUS } from 'date-fns/locale';
@@ -286,7 +286,7 @@ var Day = function (props) {
         _a));
     var ref = useRef(null);
     var isHover = false;
-    var handleDayClick = useCallback(function (day, isNoCheckIn, isNoCheckOut) {
+    var handleDayClick = useCallback(function (day) {
         if (!day.isValid) {
             return;
         }
@@ -299,7 +299,7 @@ var Day = function (props) {
         }
         setDayHover(__assign(__assign({}, day), { ref: ref }));
     }, [setDayHover]);
-    return (jsx(DayWrapper, __assign({ hover: isHover, className: classes, onClick: function () { return handleDayClick(props, isNoCheckIn, isNoCheckOut); }, onMouseEnter: function () {
+    return (jsx(DayWrapper, __assign({ hover: isHover, className: classes, onClick: function () { return handleDayClick(props); }, onMouseEnter: function () {
             return handleDayHover(props);
         }, ref: ref }, { children: date.getDate() }), void 0));
 };
@@ -653,7 +653,7 @@ if (!i18n.isInitialized) {
 var HotelCalendar = function (props) {
     var defaults = __assign(__assign({}, defaultOptions), { disabledDatesBetweenChecks: true, theme: theme, i18n: en });
     var propsWithDefault = _.defaultsDeep(__assign({}, props), defaults);
-    var theme$1 = propsWithDefault.theme, disabledDatesBetweenChecks = propsWithDefault.disabledDatesBetweenChecks, disabledDates = propsWithDefault.disabledDates, i18n$1 = propsWithDefault.i18n, locale = propsWithDefault.locale, contextProps = __rest(propsWithDefault, ["theme", "disabledDatesBetweenChecks", "disabledDates", "i18n", "locale"]);
+    var theme$1 = propsWithDefault.theme, disabledDatesBetweenChecks = propsWithDefault.disabledDatesBetweenChecks, disabledDates = propsWithDefault.disabledDates, i18n = propsWithDefault.i18n, locale = propsWithDefault.locale, contextProps = __rest(propsWithDefault, ["theme", "disabledDatesBetweenChecks", "disabledDates", "i18n", "locale"]);
     var _a = useState(false), dayHover = _a[0], setDayHover = _a[1];
     if (disabledDatesBetweenChecks) {
         contextProps.noCheckInDates
@@ -671,7 +671,8 @@ var HotelCalendar = function (props) {
         });
     }
     var optionContext = __assign(__assign({}, contextProps), { disabledDates: disabledDates.sort(function (a, b) { return a.getTime() - b.getTime(); }), locale: locale });
-    var localeCode = locale.code || 'en';
+    var i18next = useTranslation().i18n;
+    var localeCode = i18next.language || 'en';
     var calendarContext = {
         dayHover: dayHover,
         setDayHover: function (value) { return setDayHover(value); },
@@ -679,12 +680,9 @@ var HotelCalendar = function (props) {
     var wrapperRef = useRef(null);
     var mergedTheme = _.defaultsDeep(theme$1, theme);
     useEffect(function () {
-        i18n.languages = [localeCode];
-        i18n.addResourceBundle(localeCode, 'hotelcalendar', i18n$1);
-        // noinspection JSIgnoredPromiseFromCall
-        i18n.changeLanguage(localeCode);
-    }, [localeCode, i18n$1]);
-    return (jsx(I18nextProvider, __assign({ i18n: i18n, defaultNS: "hotelcalendar" }, { children: jsx(ThemeProvider, __assign({ theme: mergedTheme }, { children: jsx(OptionCtx.Provider, __assign({ value: optionContext }, { children: jsx(CalendarCtx.Provider, __assign({ value: calendarContext }, { children: jsx(Wrapper$1, __assign({ ref: wrapperRef }, { children: jsx(Calendar, {}, void 0) }), void 0) }), void 0) }), void 0) }), void 0) }), void 0));
+        i18next.addResourceBundle(localeCode, 'hotelcalendar', i18n);
+    }, [localeCode, i18next, i18n]);
+    return (jsx(ThemeProvider, __assign({ theme: mergedTheme }, { children: jsx(OptionCtx.Provider, __assign({ value: optionContext }, { children: jsx(CalendarCtx.Provider, __assign({ value: calendarContext }, { children: jsx(Wrapper$1, __assign({ ref: wrapperRef }, { children: jsx(Calendar, {}, void 0) }), void 0) }), void 0) }), void 0) }), void 0));
 };
 
 export { HotelCalendar };

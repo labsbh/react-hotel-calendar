@@ -1,11 +1,11 @@
 import { addDays, closestTo, differenceInDays, eachDayOfInterval, isAfter, subDays } from 'date-fns';
 import _ from 'lodash';
 import React, { ReactElement, useEffect, useRef, useState } from 'react';
-import { I18nextProvider } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { DefaultTheme, ThemeProvider } from 'styled-components';
 import Calendar from '../Calendar';
 import { CalendarCtx, defaultOptions, OptionCtx } from '../Store';
-import { enTranslations as en, i18nConfig } from '../translations';
+import { enTranslations } from '../translations';
 import { CalendarContext, DayHover, HotelCalendarProps, OptionContext } from '../typings';
 import { theme as defaultTheme, Wrapper } from './styled';
 
@@ -14,7 +14,7 @@ const HotelCalendar = (props: Partial<HotelCalendarProps>): ReactElement => {
         ...defaultOptions,
         disabledDatesBetweenChecks: true,
         theme: defaultTheme,
-        i18n: en,
+        i18n: enTranslations,
     };
     const propsWithDefault: HotelCalendarProps = _.defaultsDeep({ ...props }, defaults);
     const {
@@ -54,7 +54,9 @@ const HotelCalendar = (props: Partial<HotelCalendarProps>): ReactElement => {
         locale,
     };
 
-    const localeCode = locale.code || 'en';
+    const {i18n: i18next} = useTranslation();
+
+    const localeCode = i18next.language || 'en';
 
     const calendarContext: CalendarContext = {
         dayHover,
@@ -65,14 +67,11 @@ const HotelCalendar = (props: Partial<HotelCalendarProps>): ReactElement => {
     const mergedTheme: DefaultTheme = _.defaultsDeep(theme, defaultTheme);
 
     useEffect(() => {
-        i18nConfig.languages = [localeCode];
-        i18nConfig.addResourceBundle(localeCode, 'hotelcalendar', i18n);
-        // noinspection JSIgnoredPromiseFromCall
-        i18nConfig.changeLanguage(localeCode);
-    }, [localeCode, i18n]);
+        i18next.addResourceBundle(localeCode, 'hotelcalendar', i18n);
+    }, [localeCode, i18next, i18n]);
 
     return (
-        <I18nextProvider i18n={i18nConfig} defaultNS="hotelcalendar">
+
             <ThemeProvider theme={mergedTheme}>
                 <OptionCtx.Provider value={optionContext}>
                     <CalendarCtx.Provider value={calendarContext}>
@@ -82,7 +81,6 @@ const HotelCalendar = (props: Partial<HotelCalendarProps>): ReactElement => {
                     </CalendarCtx.Provider>
                 </OptionCtx.Provider>
             </ThemeProvider>
-        </I18nextProvider>
     );
 };
 

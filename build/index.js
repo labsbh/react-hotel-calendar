@@ -9,6 +9,7 @@ var React = require('react');
 var reactI18next = require('react-i18next');
 var styled = require('styled-components');
 var clsx = require('clsx');
+var rooks = require('rooks');
 var locale = require('date-fns/locale');
 var i18n = require('i18next');
 
@@ -62,73 +63,6 @@ function __makeTemplateObject(cooked, raw) {
     if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
     return cooked;
 }
-
-var size = {
-    mobileS: 320,
-    mobileM: 375,
-    mobileL: 480,
-    tablet: 768,
-    laptop: 1024,
-    laptopL: 1440,
-    desktop: 2560,
-};
-var device = {
-    mobileS: "(min-width: " + size.mobileS + "px)",
-    mobileM: "(min-width: " + size.mobileM + "px)",
-    mobileL: "(min-width: " + size.mobileL + "px)",
-    tablet: "(min-width: " + size.tablet + "px)",
-    laptop: "(min-width: " + size.laptop + "px)",
-    laptopL: "(min-width: " + size.laptopL + "px)",
-    desktop: "(min-width: " + size.desktop + "px)",
-    desktopL: "(min-width: " + size.desktop + "px)",
-};
-var breakpoints = {
-    mobileS: { min: 0, max: size.mobileS },
-    mobileM: { min: size.mobileS + 1, max: size.mobileM },
-    mobileL: { min: size.mobileM + 1, max: size.mobileL },
-    tablet: { min: size.mobileL + 1, max: size.tablet },
-    laptop: { min: size.tablet + 1, max: size.laptop },
-    laptopL: { min: size.laptop + 1, max: size.laptopL },
-    desktop: { min: size.laptopL + 1, max: size.desktop },
-    desktopL: { min: size.desktop + 1, max: null },
-};
-
-var getWidth = function () {
-    return typeof window === 'undefined'
-        ? 0
-        : window.innerWidth ||
-            document.documentElement.clientWidth ||
-            document.body.clientWidth;
-};
-var useCurrentWidth = function () {
-    var _a = React.useState(getWidth()), width = _a[0], setWidth = _a[1];
-    React.useEffect(function () {
-        var timeout = null;
-        var resizeListener = function () {
-            if (typeof window !== 'undefined') {
-                if (timeout) {
-                    window.clearTimeout(timeout);
-                }
-                timeout = window.setTimeout(function () { return setWidth(getWidth()); }, 150);
-            }
-        };
-        window.addEventListener('resize', resizeListener);
-        return function () {
-            if (typeof window !== 'undefined') {
-                window.removeEventListener('resize', resizeListener);
-            }
-        };
-    }, []);
-    return width;
-};
-var useBreakpointsUp = function (breakpoints) {
-    var width = useCurrentWidth();
-    return Object.keys(breakpoints).reduce(function (result, key) {
-        var min = breakpoints[key].min;
-        result[key] = width >= min;
-        return result;
-    }, {});
-};
 
 /* eslint-disable @typescript-eslint/no-empty-function */
 var defaultOptions = {
@@ -295,6 +229,7 @@ var Day = function (props) {
         _a['no-checkin'] = isNoCheckIn,
         _a['no-checkout'] = isNoCheckOut,
         _a['day-of-week-disable'] = isDayOfWeekDisabled,
+        _a['rhc-day'] = true,
         _a));
     var ref = React.useRef(null);
     var isHover = false;
@@ -478,6 +413,26 @@ var useDays = function (month) {
     return days;
 };
 
+var size = {
+    mobileS: 320,
+    mobileM: 375,
+    mobileL: 480,
+    tablet: 768,
+    laptop: 1024,
+    laptopL: 1440,
+    desktop: 2560,
+};
+var device = {
+    mobileS: "(min-width: " + size.mobileS + "px)",
+    mobileM: "(min-width: " + size.mobileM + "px)",
+    mobileL: "(min-width: " + size.mobileL + "px)",
+    tablet: "(min-width: " + size.tablet + "px)",
+    laptop: "(min-width: " + size.laptop + "px)",
+    laptopL: "(min-width: " + size.laptopL + "px)",
+    desktop: "(min-width: " + size.desktop + "px)",
+    desktopL: "(min-width: " + size.desktop + "px)",
+};
+
 var MonthTable = styled__default["default"].table(templateObject_1$2 || (templateObject_1$2 = __makeTemplateObject(["\n  border-collapse: collapse;\n  display: ", ";\n  font-size: ", ";\n  position: relative;\n  text-align: center;\n  width: ", ";\n\n  @media only screen and ", " {\n    display: table;\n    float: ", ";\n    width: ", ";\n  }\n\n  @media only screen and ", " {\n    width: ", ";\n  }\n"], ["\n  border-collapse: collapse;\n  display: ", ";\n  font-size: ", ";\n  position: relative;\n  text-align: center;\n  width: ", ";\n\n  @media only screen and ", " {\n    display: table;\n    float: ", ";\n    width: ", ";\n  }\n\n  @media only screen and ", " {\n    width: ", ";\n  }\n"])), function (props) { return (props.first ? 'table' : 'none'); }, function (props) { return props.theme.months.table.fontSize; }, function (props) { return props.theme.months.table.widths.sm; }, device.mobileL, function (props) { return (props.first ? 'left' : 'right'); }, function (props) { return props.theme.months.table.widths.md; }, device.tablet, function (props) { return props.theme.months.table.widths.lg; });
 var Caption = styled__default["default"].tr(templateObject_2$1 || (templateObject_2$1 = __makeTemplateObject(["\n  border-bottom: 1px solid\n    ", ";\n  height: ", ";\n  vertical-align: middle;\n"], ["\n  border-bottom: 1px solid\n    ", ";\n  height: ", ";\n  vertical-align: middle;\n"])), function (props) { return props.theme.months.table.borderColor; }, function (props) { return props.theme.months.table.caption.height; });
 var NavButton = styled__default["default"].span(templateObject_3$1 || (templateObject_3$1 = __makeTemplateObject(["\n  background-color: ", ";\n  border-radius: 4px;\n  color: ", ";\n  cursor: pointer;\n  display: inline-block;\n  padding: 5px 10px;\n  ", "\n\n  &:hover {\n    background-color: ", ";\n    color: ", ";\n  }\n"], ["\n  background-color: ", ";\n  border-radius: 4px;\n  color: ", ";\n  cursor: pointer;\n  display: inline-block;\n  padding: 5px 10px;\n  ", "\n\n  &:hover {\n    background-color: ", ";\n    color: ", ";\n  }\n"])), function (props) {
@@ -494,16 +449,16 @@ var WeekDays = styled__default["default"].tr(templateObject_5 || (templateObject
 var WeekDayName = styled__default["default"].th(templateObject_6 || (templateObject_6 = __makeTemplateObject(["\n  font-size: ", ";\n  font-weight: ", ";\n  text-transform: uppercase;\n"], ["\n  font-size: ", ";\n  font-weight: ", ";\n  text-transform: uppercase;\n"])), function (props) { return props.theme.months.table.weekDays.fontSize; }, function (props) { return props.theme.months.table.weekDays.fontSize; });
 var templateObject_1$2, templateObject_2$1, templateObject_3$1, templateObject_4, templateObject_5, templateObject_6;
 
-var Month = function (_a) {
+var Month = React.forwardRef(function (_a, ref) {
     var first = _a.first, date = _a.date, goToNextMonth = _a.goToNextMonth, goToPreviousMonth = _a.goToPreviousMonth, nextMonth = _a.nextMonth, previousMonth = _a.previousMonth;
     var _b = React.useContext(OptionCtx), locale = _b.locale, endDate = _b.endDate, startDate = _b.startDate, moveBothMonths = _b.moveBothMonths;
     var days = useDays(date);
     var getWeekDayNames = React.useCallback(function () {
         return Array.from(Array(7).keys()).map(function (day) {
             var _a, _b;
-            return (jsxRuntime.jsx(WeekDayName, { children: (_a = locale.localize) === null || _a === void 0 ? void 0 : _a.day((day + (((_b = locale.options) === null || _b === void 0 ? void 0 : _b.weekStartsOn) || 0)) % 7, {
+            return (jsxRuntime.jsx(WeekDayName, __assign({ className: "rhc-weekday-name" }, { children: (_a = locale.localize) === null || _a === void 0 ? void 0 : _a.day((day + (((_b = locale.options) === null || _b === void 0 ? void 0 : _b.weekStartsOn) || 0)) % 7, {
                     width: 'abbreviated',
-                }) }, "day-name-" + day));
+                }) }), "day-name-" + day));
         });
     }, [locale]);
     var getMonthName = React.useCallback(function (date) {
@@ -526,7 +481,7 @@ var Month = function (_a) {
     var showNext = moveBothMonths && (undefined !== previousMonth || undefined !== nextMonth)
         ? !first && !isMonthOutOfRange(dateFns.addMonths(date, 1))
         : !isMonthOutOfRange(dateFns.addMonths(date, 1));
-    return (jsxRuntime.jsxs(MonthTable, __assign({ first: first }, { children: [jsxRuntime.jsxs("thead", { children: [jsxRuntime.jsxs(Caption, { children: [jsxRuntime.jsx("th", { children: showPrevious && (jsxRuntime.jsx(NavButton, __assign({ onClick: goToPreviousMonth }, { children: "<" }), void 0)) }, void 0), jsxRuntime.jsx(MonthName, __assign({ colSpan: 5 }, { children: getMonthName(date) }), void 0), jsxRuntime.jsx("th", { children: showNext && jsxRuntime.jsx(NavButton, __assign({ onClick: goToNextMonth }, { children: ">" }), void 0) }, void 0)] }, void 0), jsxRuntime.jsx(WeekDays, { children: getWeekDayNames() }, void 0)] }, void 0), jsxRuntime.jsx("tbody", { children: date &&
+    return (jsxRuntime.jsxs(MonthTable, __assign({ first: first, ref: ref }, { children: [jsxRuntime.jsxs("thead", { children: [jsxRuntime.jsxs(Caption, { children: [jsxRuntime.jsx("th", { children: showPrevious && (jsxRuntime.jsx(NavButton, __assign({ onClick: goToPreviousMonth, className: "rhc-previous-btn" }, { children: "<" }), void 0)) }, void 0), jsxRuntime.jsx(MonthName, __assign({ colSpan: 5, className: "rhc-month-name" }, { children: getMonthName(date) }), void 0), jsxRuntime.jsx("th", { children: showNext && jsxRuntime.jsx(NavButton, __assign({ onClick: goToNextMonth, className: "rhc-next-btn" }, { children: ">" }), void 0) }, void 0)] }, void 0), jsxRuntime.jsx(WeekDays, __assign({ className: "rhc-weekdays" }, { children: getWeekDayNames() }), void 0)] }, void 0), jsxRuntime.jsx("tbody", { children: date &&
                     Array.from(Array(6).keys()).map(function (week) {
                         if (undefined === days[week * 7] ||
                             days[week * 7].type === 'nextMonth') {
@@ -538,14 +493,14 @@ var Month = function (_a) {
                                 return jsxRuntime.jsx(Day, __assign({}, day), week + "-" + weekDay);
                             }) }, "week-" + week));
                     }) }, void 0)] }), void 0));
-};
+});
 
 var TooltipWrapper = styled__default["default"].div(templateObject_1$1 || (templateObject_1$1 = __makeTemplateObject(["\n  background-color: ", ";\n  border-radius: ", ";\n  color: ", ";\n  font-size: ", ";\n  margin-top: -5px;\n  padding: ", ";\n  position: absolute;\n  transform: translateY(-100%) translateX(-50%);\n  white-space: nowrap;\n\n  &:after {\n    border-left: 4px solid transparent;\n    border-right: 4px solid transparent;\n    border-top: 4px solid\n      ", ";\n    bottom: -4px;\n    content: '';\n    left: 50%;\n    margin-left: -4px;\n    position: absolute;\n  }\n"], ["\n  background-color: ", ";\n  border-radius: ", ";\n  color: ", ";\n  font-size: ", ";\n  margin-top: -5px;\n  padding: ", ";\n  position: absolute;\n  transform: translateY(-100%) translateX(-50%);\n  white-space: nowrap;\n\n  &:after {\n    border-left: 4px solid transparent;\n    border-right: 4px solid transparent;\n    border-top: 4px solid\n      ", ";\n    bottom: -4px;\n    content: '';\n    left: 50%;\n    margin-left: -4px;\n    position: absolute;\n  }\n"])), function (props) { return props.theme.tooltip.backgroundColor; }, function (props) { return props.theme.tooltip.borderRadius; }, function (props) { return props.theme.tooltip.textColor; }, function (props) { return props.theme.tooltip.fontSize; }, function (props) { return props.theme.tooltip.padding; }, function (props) { return props.theme.tooltip.backgroundColor; });
 var templateObject_1$1;
 
 var Tooltip = function () {
     var t = reactI18next.useTranslation().t;
-    var _a = React.useContext(OptionCtx), hoveringTooltipOption = _a.hoveringTooltip, format = _a.format;
+    var _a = React.useContext(OptionCtx), hoveringTooltipOption = _a.hoveringTooltip, format = _a.format, locale = _a.locale;
     var dayHover = React.useContext(CalendarCtx).dayHover;
     var hoveringTooltip = React.useState(hoveringTooltipOption &&
         !((typeof window !== 'undefined' && 'ontouchstart' in window) ||
@@ -573,10 +528,12 @@ var Tooltip = function () {
     }
     else {
         if (dayHover.isNoCheckIn) {
-            tooltipContent = jsxRuntime.jsx(reactI18next.Trans, __assign({ t: t, values: { date: dateFns.format(dayHover.date, format) } }, { children: "no_checkin" }), void 0);
+            tooltipContent =
+                jsxRuntime.jsx(reactI18next.Trans, __assign({ t: t, values: { date: dateFns.format(dayHover.date, format, { locale: locale }) } }, { children: "no_checkin" }), void 0);
         }
         else if (dayHover.isDisabled) {
-            tooltipContent = jsxRuntime.jsx(reactI18next.Trans, __assign({ t: t, values: { date: dateFns.format(dayHover.date, format) } }, { children: "not_available" }), void 0);
+            tooltipContent =
+                jsxRuntime.jsx(reactI18next.Trans, __assign({ t: t, values: { date: dateFns.format(dayHover.date, format, { locale: locale }) } }, { children: "not_available" }), void 0);
         }
     }
     if (null === tooltipContent) {
@@ -585,18 +542,22 @@ var Tooltip = function () {
     return (jsxRuntime.jsx(TooltipWrapper, __assign({ style: { left: left, top: top } }, { children: tooltipContent }), void 0));
 };
 
-var Wrapper = styled__default["default"].section(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n  background-color: ", ";\n  border: ", ";\n  border-radius: ", ";\n  box-shadow: ", ";\n  box-sizing: border-box;\n  color: ", ";\n  display: none;\n  font-family: ", ";\n  font-size: ", ";\n  height: auto;\n  left: 0;\n  line-height: ", ";\n  overflow: hidden;\n  position: absolute;\n  transition: transform ", " ease;\n  transform: scaleY(1);\n  transform-origin: 50% 0;\n  width: ", ";\n  z-index: 1;\n\n  @media only screen and ", " {\n    width: ", ";\n  }\n\n  @media only screen and ", " {\n    width: ", ";\n  }\n\n  &.closed {\n    transform: scaleY(0);\n  }\n\n  &.rendered {\n    display: block;\n  }\n"], ["\n  background-color: ", ";\n  border: ", ";\n  border-radius: ", ";\n  box-shadow: ", ";\n  box-sizing: border-box;\n  color: ", ";\n  display: none;\n  font-family: ", ";\n  font-size: ", ";\n  height: auto;\n  left: 0;\n  line-height: ", ";\n  overflow: hidden;\n  position: absolute;\n  transition: transform ", " ease;\n  transform: scaleY(1);\n  transform-origin: 50% 0;\n  width: ", ";\n  z-index: 1;\n\n  @media only screen and ", " {\n    width: ", ";\n  }\n\n  @media only screen and ", " {\n    width: ", ";\n  }\n\n  &.closed {\n    transform: scaleY(0);\n  }\n\n  &.rendered {\n    display: block;\n  }\n"])), function (props) { return props.theme.calendar.backgroundColor; }, function (props) { return props.theme.calendar.border; }, function (props) { return props.theme.calendar.borderRadius; }, function (props) { return props.theme.calendar.boxShadow; }, function (props) { return props.theme.calendar.color; }, function (props) { return props.theme.fontFamily; }, function (props) { return props.theme.calendar.fontSize; }, function (props) { return props.theme.calendar.lineHeight; }, function (props) { return props.theme.animationSpeed; }, function (props) { return props.theme.calendar.widths.sm; }, device.mobileL, function (props) { return props.theme.calendar.widths.md; }, device.tablet, function (props) { return props.theme.calendar.widths.lg; });
-var DatePickerInner = styled__default["default"].div(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n  overflow: hidden;\n  padding: ", ";\n"], ["\n  overflow: hidden;\n  padding: ", ";\n"])), function (props) { return props.theme.calendar.padding; });
+var Wrapper = styled__default["default"].section(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n  background-color: ", ";\n  border: ", ";\n  border-radius: ", ";\n  box-shadow: ", ";\n  box-sizing: border-box;\n  color: ", ";\n  display: none;\n  font-family: ", ";\n  font-size: ", ";\n  height: auto;\n  left: 0;\n  line-height: ", ";\n  position: relative;\n  transition: transform ", " ease;\n  transform: scaleY(1);\n  transform-origin: 50% 0;\n  width: ", ";\n  z-index: 1;\n\n  @media only screen and ", " {\n    width: ", ";\n  }\n\n  @media only screen and ", " {\n    width: ", ";\n  }\n\n  &.closed {\n    transform: scaleY(0);\n  }\n\n  &.rendered {\n    display: block;\n  }\n"], ["\n  background-color: ", ";\n  border: ", ";\n  border-radius: ", ";\n  box-shadow: ", ";\n  box-sizing: border-box;\n  color: ", ";\n  display: none;\n  font-family: ", ";\n  font-size: ", ";\n  height: auto;\n  left: 0;\n  line-height: ", ";\n  position: relative;\n  transition: transform ", " ease;\n  transform: scaleY(1);\n  transform-origin: 50% 0;\n  width: ", ";\n  z-index: 1;\n\n  @media only screen and ", " {\n    width: ", ";\n  }\n\n  @media only screen and ", " {\n    width: ", ";\n  }\n\n  &.closed {\n    transform: scaleY(0);\n  }\n\n  &.rendered {\n    display: block;\n  }\n"])), function (props) { return props.theme.calendar.backgroundColor; }, function (props) { return props.theme.calendar.border; }, function (props) { return props.theme.calendar.borderRadius; }, function (props) { return props.theme.calendar.boxShadow; }, function (props) { return props.theme.calendar.color; }, function (props) { return props.theme.fontFamily; }, function (props) { return props.theme.calendar.fontSize; }, function (props) { return props.theme.calendar.lineHeight; }, function (props) { return props.theme.animationSpeed; }, function (props) { return props.theme.calendar.widths.sm; }, device.mobileL, function (props) { return props.theme.calendar.widths.md; }, device.tablet, function (props) { return props.theme.calendar.widths.lg; });
+var DatePickerInner = styled__default["default"].div(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n  padding: ", ";\n"], ["\n  padding: ", ";\n"])), function (props) { return props.theme.calendar.padding; });
 var Months = styled__default["default"].div(templateObject_3 || (templateObject_3 = __makeTemplateObject(["\n  @media only screen and ", " {\n    overflow: visible;\n    position: relative;\n\n    &:before {\n      background: ", ";\n      bottom: 0;\n      content: '';\n      display: block;\n      left: 50%;\n      position: absolute;\n      top: 0;\n      width: ", ";\n    }\n    &:after {\n      clear: both;\n      content: '';\n      display: block;\n    }\n  }\n"], ["\n  @media only screen and ", " {\n    overflow: visible;\n    position: relative;\n\n    &:before {\n      background: ", ";\n      bottom: 0;\n      content: '';\n      display: block;\n      left: 50%;\n      position: absolute;\n      top: 0;\n      width: ", ";\n    }\n    &:after {\n      clear: both;\n      content: '';\n      display: block;\n    }\n  }\n"])), device.mobileL, function (props) { return props.theme.months.spacer.color; }, function (props) { return props.theme.months.spacer.width; });
 var templateObject_1, templateObject_2, templateObject_3;
 
 var Calendar = function () {
-    var responsive = useBreakpointsUp(breakpoints);
-    var laptop = responsive.laptop;
-    var _a = React.useContext(OptionCtx), startDate = _a.startDate, endDate = _a.endDate, moveBothMonths = _a.moveBothMonths;
-    var _b = React.useState(startDate ? startDate : new Date()), firstMonth = _b[0], setFirstMonth = _b[1];
-    var _c = React.useState(dateFns.addMonths(startDate ? startDate : new Date(), 1)), secondMonth = _c[0], setSecondMonth = _c[1];
-    var _d = React.useState(false), isRender = _d[0], setIsRender = _d[1];
+    var _a = React.useState(false), laptop = _a[0], setLaptop = _a[1];
+    var secondMonthRef = rooks.useIntersectionObserverRef(function (entries) {
+        if (entries && entries[0]) {
+            setLaptop(entries[0].isIntersecting);
+        }
+    })[0];
+    var _b = React.useContext(OptionCtx), startDate = _b.startDate, endDate = _b.endDate, moveBothMonths = _b.moveBothMonths;
+    var _c = React.useState(startDate ? startDate : new Date()), firstMonth = _c[0], setFirstMonth = _c[1];
+    var _d = React.useState(dateFns.addMonths(startDate ? startDate : new Date(), 1)), secondMonth = _d[0], setSecondMonth = _d[1];
+    var _e = React.useState(false), isRender = _e[0], setIsRender = _e[1];
     React.useEffect(function () {
         var defaultStart = new Date();
         var defaultEnd = new Date();
@@ -639,7 +600,7 @@ var Calendar = function () {
                                 if (moveBothMonths) {
                                     setFirstMonth(dateFns.addMonths(firstMonth, 1));
                                 }
-                            } }, void 0), jsxRuntime.jsx(Tooltip, {}, void 0)] }, void 0) }, void 0) }), void 0) }, void 0));
+                            }, ref: secondMonthRef }, void 0), jsxRuntime.jsx(Tooltip, {}, void 0)] }, void 0) }, void 0) }), void 0) }, void 0));
 };
 
 var en = {

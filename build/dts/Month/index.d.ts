@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import React from 'react';
 import { MonthProps } from '../typings';
-declare const Month: ({ first, date, goToNextMonth, goToPreviousMonth, nextMonth, previousMonth, }: MonthProps) => ReactElement;
+declare const Month: React.ForwardRefExoticComponent<MonthProps & React.RefAttributes<HTMLTableElement>>;
 export default Month;

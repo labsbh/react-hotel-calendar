@@ -2,12 +2,11 @@ import { jsx, jsxs } from 'react/jsx-runtime';
 import { differenceInCalendarDays, isSameDay, format, startOfMonth, subDays, addDays, isSameMonth, differenceInMilliseconds, subMonths, addMonths, differenceInCalendarMonths, closestTo, isAfter, differenceInDays, eachDayOfInterval } from 'date-fns';
 import _ from 'lodash';
 import React, { createContext, useContext, useRef, useCallback, forwardRef, useState, useEffect } from 'react';
-import { useTranslation, Trans, initReactI18next } from 'react-i18next';
 import styled, { ThemeProvider } from 'styled-components';
 import clsx from 'clsx';
 import { useIntersectionObserverRef } from 'rooks';
 import { enUS } from 'date-fns/locale';
-import i18n from 'i18next';
+import { useTranslation, Trans } from 'react-i18next';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -291,7 +290,7 @@ var useIsValidDate = function () {
 };
 var useDayProperties = function () {
     var _a = useContext(OptionCtx), startDate = _a.startDate, disabledDates = _a.disabledDates, disabledDaysOfWeek = _a.disabledDaysOfWeek, noCheckInDates = _a.noCheckInDates, noCheckOutDates = _a.noCheckOutDates;
-    var t = useTranslation().t;
+    var t = useTranslation('hotelcalendar').t;
     var isValidDate = useIsValidDate();
     var getClosest = useClosest();
     return useCallback(function (date, type) {
@@ -356,13 +355,7 @@ var useDayProperties = function () {
         }
         var title = '';
         if (isNoCheckIn) {
-            title = t('checkin-disabled');
-        }
-        if (isNoCheckOut) {
-            if (title) {
-                title += '. ';
-            }
-            title = t('checkout-disabled');
+            title = t('hotelcalendar:no_checkin', { date: date });
         }
         return {
             date: date,
@@ -487,7 +480,7 @@ var TooltipWrapper = styled.div(templateObject_1$1 || (templateObject_1$1 = __ma
 var templateObject_1$1;
 
 var Tooltip = function () {
-    var t = useTranslation().t;
+    var t = useTranslation('hotelcalendar').t;
     var _a = useContext(OptionCtx), hoveringTooltipOption = _a.hoveringTooltip, format$1 = _a.format, locale = _a.locale;
     var dayHover = useContext(CalendarCtx).dayHover;
     var hoveringTooltip = useState(hoveringTooltipOption &&
@@ -517,11 +510,11 @@ var Tooltip = function () {
     else {
         if (dayHover.isNoCheckIn) {
             tooltipContent =
-                jsx(Trans, __assign({ t: t, values: { date: format(dayHover.date, format$1, { locale: locale }) } }, { children: "no_checkin" }), void 0);
+                jsx(Trans, __assign({ t: t, values: { date: format(dayHover.date, format$1, { locale: locale }) } }, { children: "hotelcalendar:no_checkin" }), void 0);
         }
         else if (dayHover.isDisabled) {
             tooltipContent =
-                jsx(Trans, __assign({ t: t, values: { date: format(dayHover.date, format$1, { locale: locale }) } }, { children: "not_available" }), void 0);
+                jsx(Trans, __assign({ t: t, values: { date: format(dayHover.date, format$1, { locale: locale }) } }, { children: "hotelcalendar:not_available" }), void 0);
         }
     }
     if (null === tooltipContent) {
@@ -591,30 +584,10 @@ var Calendar = function () {
                             }, ref: secondMonthRef }, void 0), jsx(Tooltip, {}, void 0)] }, void 0) }, void 0) }), void 0) }, void 0));
 };
 
-var en = {
-    not_available: '{{date}}<br/>Booked',
-    no_checkin: '{{date}}<br/>Possible departure',
-};
-
-// noinspection JSIgnoredPromiseFromCall
-if (!i18n.isInitialized) {
-    i18n.use(initReactI18next).init({
-        defaultNS: 'hotelcalendar',
-        lng: 'en',
-        resources: {},
-        interpolation: {
-            escapeValue: false,
-        },
-        react: {
-            transKeepBasicHtmlNodesFor: ['br', 'strong', 'i'],
-        }
-    });
-}
-
 var HotelCalendar = function (props) {
-    var defaults = __assign(__assign({}, defaultOptions), { disabledDatesBetweenChecks: true, theme: theme, i18n: en });
+    var defaults = __assign(__assign({}, defaultOptions), { disabledDatesBetweenChecks: true, theme: theme });
     var propsWithDefault = _.defaultsDeep(__assign({}, props), defaults);
-    var theme$1 = propsWithDefault.theme, disabledDatesBetweenChecks = propsWithDefault.disabledDatesBetweenChecks, disabledDates = propsWithDefault.disabledDates, i18n = propsWithDefault.i18n, locale = propsWithDefault.locale, contextProps = __rest(propsWithDefault, ["theme", "disabledDatesBetweenChecks", "disabledDates", "i18n", "locale"]);
+    var theme$1 = propsWithDefault.theme, disabledDatesBetweenChecks = propsWithDefault.disabledDatesBetweenChecks, disabledDates = propsWithDefault.disabledDates, locale = propsWithDefault.locale, contextProps = __rest(propsWithDefault, ["theme", "disabledDatesBetweenChecks", "disabledDates", "locale"]);
     var _a = useState(false), dayHover = _a[0], setDayHover = _a[1];
     if (disabledDatesBetweenChecks) {
         contextProps.noCheckInDates
@@ -632,17 +605,12 @@ var HotelCalendar = function (props) {
         });
     }
     var optionContext = __assign(__assign({}, contextProps), { disabledDates: disabledDates.sort(function (a, b) { return a.getTime() - b.getTime(); }), locale: locale });
-    var i18next = useTranslation().i18n;
-    var localeCode = i18next.language || 'en';
     var calendarContext = {
         dayHover: dayHover,
         setDayHover: function (value) { return setDayHover(value); },
     };
     var wrapperRef = useRef(null);
     var mergedTheme = _.defaultsDeep(theme$1, theme);
-    useEffect(function () {
-        i18next.addResourceBundle(localeCode, 'hotelcalendar', i18n);
-    }, [localeCode, i18next, i18n]);
     return (jsx(ThemeProvider, __assign({ theme: mergedTheme }, { children: jsx(OptionCtx.Provider, __assign({ value: optionContext }, { children: jsx(CalendarCtx.Provider, __assign({ value: calendarContext }, { children: jsx(Wrapper$1, __assign({ ref: wrapperRef }, { children: jsx(Calendar, {}, void 0) }), void 0) }), void 0) }), void 0) }), void 0));
 };
 

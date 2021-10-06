@@ -26,7 +26,6 @@
   },
   "include": [
     "./src",
-    "./src/translations/*.json"
   ],
   "exclude": [
     "node_modules",

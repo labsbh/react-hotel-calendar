@@ -1,11 +1,6 @@
 import { Locale } from 'date-fns';
 import { ReactElement } from 'react';
 
-declare const en: {
-    not_available: string;
-    no_checkin: string;
-};
-
 interface HotelCalendarTheme {
     fontFamily?: string;
     animationSpeed?: string;
@@ -95,7 +90,6 @@ interface HotelCalendarTheme {
     };
 }
 declare type TooltipCallback = (hover: Date) => string | ReactElement;
-declare type Translations = typeof en;
 interface InputElementProps {
     value?: string;
     onClick?: () => any;
@@ -111,7 +105,6 @@ declare type HotelCalendarProps = {
     disabledDaysOfWeek: Array<number>;
     hoveringTooltip: boolean | TooltipCallback;
     moveBothMonths: boolean;
-    i18n: Translations;
     onDayClick: undefined | false | ((_date: Date) => any);
     theme: HotelCalendarTheme;
     disabledDatesBetweenChecks: boolean;
@@ -119,4 +112,4 @@ declare type HotelCalendarProps = {
 
 declare const HotelCalendar: (props: Partial<HotelCalendarProps>) => ReactElement;
 
-export { HotelCalendar, HotelCalendarProps, HotelCalendarTheme, InputElementProps, Translations };
+export { HotelCalendar, HotelCalendarProps, HotelCalendarTheme, InputElementProps };

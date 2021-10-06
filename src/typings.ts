@@ -1,7 +1,5 @@
 import { Locale } from 'date-fns';
 import { ReactElement, RefObject } from 'react';
-import { CallbackRef } from 'rooks/dist/esm/utils/utils';
-import { enTranslations as translations } from './translations';
 
 export interface HotelCalendarTheme {
     fontFamily?: string;
@@ -148,8 +146,6 @@ export type CalendarContext = {
 
 export type MonthDayInfos = DayOfMonth;
 
-export type Translations = typeof translations;
-
 export interface InputElementProps {
     value?: string,
     onClick?: () => any,
@@ -166,7 +162,6 @@ export type HotelCalendarProps = {
     disabledDaysOfWeek: Array<number>;
     hoveringTooltip: boolean | TooltipCallback;
     moveBothMonths: boolean;
-    i18n: Translations;
     onDayClick: undefined | false | ((_date: Date) => any);
     theme: HotelCalendarTheme;
     disabledDatesBetweenChecks: boolean;

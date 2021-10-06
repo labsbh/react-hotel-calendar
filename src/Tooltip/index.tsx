@@ -5,7 +5,7 @@ import { CalendarCtx, OptionCtx } from '../Store';
 import { TooltipWrapper } from './styled';
 
 const Tooltip = (): ReactElement | null => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('hotelcalendar');
     const { hoveringTooltip: hoveringTooltipOption, format, locale } = useContext(OptionCtx);
     const { dayHover } = useContext(CalendarCtx);
     const [hoveringTooltip] = useState(
@@ -43,10 +43,10 @@ const Tooltip = (): ReactElement | null => {
 
         if (dayHover.isNoCheckIn) {
             tooltipContent =
-                <Trans t={t} values={{ date: formatDate(dayHover.date, format, { locale }) }}>no_checkin</Trans>;
+                <Trans t={t} values={{ date: formatDate(dayHover.date, format, { locale }) }}>hotelcalendar:no_checkin</Trans>;
         } else if (dayHover.isDisabled) {
             tooltipContent =
-                <Trans t={t} values={{ date: formatDate(dayHover.date, format, { locale }) }}>not_available</Trans>;
+                <Trans t={t} values={{ date: formatDate(dayHover.date, format, { locale }) }}>hotelcalendar:not_available</Trans>;
         }
     }
 

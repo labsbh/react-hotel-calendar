@@ -2,24 +2,27 @@
 import { enUS } from 'date-fns/locale';
 import { createContext } from 'react';
 import { CalendarContext, OptionContext } from '../typings';
+import { enTranslations } from '../translations';
 
 const defaultOptions: OptionContext = {
-  locale: enUS,
-  format: 'P',
-  startDate: new Date(),
-  endDate: false,
-  disabledDates: [],
-  noCheckInDates: [],
-  noCheckOutDates: [],
-  disabledDaysOfWeek: [],
-  hoveringTooltip: true,
-  moveBothMonths: true,
-  onDayClick: undefined,
+    locale: enUS,
+    format: 'P',
+    startDate: new Date(),
+    endDate: false,
+    disabledDates: [],
+    noCheckInDates: [],
+    noCheckOutDates: [],
+    disabledDaysOfWeek: [],
+    hoveringTooltip: true,
+    moveBothMonths: true,
+    onDayClick: undefined,
+    i18n: enTranslations,
 };
 
 const defaultCalendar: CalendarContext = {
-  dayHover: false,
-  setDayHover: (_value) => {},
+    dayHover: false,
+    setDayHover: (_value) => {
+    },
 };
 
 const OptionCtx = createContext<OptionContext>(defaultOptions);

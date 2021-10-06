@@ -1,5 +1,6 @@
 import { Locale } from 'date-fns';
 import { ReactElement, RefObject } from 'react';
+import { enTranslations as translations } from './translations';
 
 export interface HotelCalendarTheme {
     fontFamily?: string;
@@ -100,7 +101,7 @@ export type BreakPoints = Record<string, BreakPoint>;
 export type DayMonthType = 'lastMonth' | 'visibleMonth' | 'nextMonth';
 
 export type TooltipCallback = (
-    hover: Date,
+    hover: MonthDayInfos,
 ) => string | ReactElement;
 
 export type DayOfMonth = {
@@ -136,6 +137,7 @@ export type OptionContext = {
     disabledDaysOfWeek: Array<number>;
     hoveringTooltip: boolean | TooltipCallback;
     moveBothMonths: boolean;
+    i18n: Translations;
     onDayClick: undefined | false | ((date: Date) => any);
 };
 
@@ -145,6 +147,8 @@ export type CalendarContext = {
 };
 
 export type MonthDayInfos = DayOfMonth;
+
+export type Translations = typeof translations;
 
 export interface InputElementProps {
     value?: string,
@@ -162,6 +166,7 @@ export type HotelCalendarProps = {
     disabledDaysOfWeek: Array<number>;
     hoveringTooltip: boolean | TooltipCallback;
     moveBothMonths: boolean;
+    i18n: Translations;
     onDayClick: undefined | false | ((_date: Date) => any);
     theme: HotelCalendarTheme;
     disabledDatesBetweenChecks: boolean;

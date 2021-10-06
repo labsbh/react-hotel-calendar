@@ -6,7 +6,6 @@ import styled, { ThemeProvider } from 'styled-components';
 import clsx from 'clsx';
 import { useIntersectionObserverRef } from 'rooks';
 import { enUS } from 'date-fns/locale';
-import { useTranslation, Trans } from 'react-i18next';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -51,6 +50,11 @@ function __makeTemplateObject(cooked, raw) {
     return cooked;
 }
 
+var en = {
+    not_available: '{{date}}<br/>Booked',
+    no_checkin: '{{date}}<br/>Possible departure',
+};
+
 /* eslint-disable @typescript-eslint/no-empty-function */
 var defaultOptions = {
     locale: enUS,
@@ -64,10 +68,12 @@ var defaultOptions = {
     hoveringTooltip: true,
     moveBothMonths: true,
     onDayClick: undefined,
+    i18n: en,
 };
 var defaultCalendar = {
     dayHover: false,
-    setDayHover: function (_value) { },
+    setDayHover: function (_value) {
+    },
 };
 var OptionCtx = createContext(defaultOptions);
 var CalendarCtx = createContext(defaultCalendar);
@@ -290,7 +296,6 @@ var useIsValidDate = function () {
 };
 var useDayProperties = function () {
     var _a = useContext(OptionCtx), startDate = _a.startDate, disabledDates = _a.disabledDates, disabledDaysOfWeek = _a.disabledDaysOfWeek, noCheckInDates = _a.noCheckInDates, noCheckOutDates = _a.noCheckOutDates;
-    var t = useTranslation('hotelcalendar').t;
     var isValidDate = useIsValidDate();
     var getClosest = useClosest();
     return useCallback(function (date, type) {
@@ -354,9 +359,6 @@ var useDayProperties = function () {
             }
         }
         var title = '';
-        if (isNoCheckIn) {
-            title = t('hotelcalendar:no_checkin', { date: date });
-        }
         return {
             date: date,
             title: title,
@@ -372,7 +374,7 @@ var useDayProperties = function () {
             isNoCheckOut: isNoCheckOut,
             isFirstDisabledDate: consecutiveDisableDates === 1,
         };
-    }, [startDate, isValidDate, disabledDates, disabledDaysOfWeek, noCheckInDates, noCheckOutDates, getClosest, t]);
+    }, [startDate, isValidDate, disabledDates, disabledDaysOfWeek, noCheckInDates, noCheckOutDates, getClosest]);
 };
 var useDays = function (month) {
     var _a;
@@ -480,8 +482,7 @@ var TooltipWrapper = styled.div(templateObject_1$1 || (templateObject_1$1 = __ma
 var templateObject_1$1;
 
 var Tooltip = function () {
-    var t = useTranslation('hotelcalendar').t;
-    var _a = useContext(OptionCtx), hoveringTooltipOption = _a.hoveringTooltip, format$1 = _a.format, locale = _a.locale;
+    var _a = useContext(OptionCtx), hoveringTooltipOption = _a.hoveringTooltip, format$1 = _a.format, locale = _a.locale, i18n = _a.i18n;
     var dayHover = useContext(CalendarCtx).dayHover;
     var hoveringTooltip = useState(hoveringTooltipOption &&
         !((typeof window !== 'undefined' && 'ontouchstart' in window) ||
@@ -505,16 +506,16 @@ var Tooltip = function () {
     }
     var tooltipContent = null;
     if (typeof hoveringTooltipOption === 'function') {
-        tooltipContent = hoveringTooltipOption(dayHover.date);
+        tooltipContent = hoveringTooltipOption(dayHover);
     }
     else {
         if (dayHover.isNoCheckIn) {
             tooltipContent =
-                jsx(Trans, __assign({ t: t, values: { date: format(dayHover.date, format$1, { locale: locale }) } }, { children: "hotelcalendar:no_checkin" }), void 0);
+                jsx("div", { dangerouslySetInnerHTML: { __html: i18n.no_checkin.replace('{{date}}', format(dayHover.date, format$1, { locale: locale })) } }, void 0);
         }
         else if (dayHover.isDisabled) {
             tooltipContent =
-                jsx(Trans, __assign({ t: t, values: { date: format(dayHover.date, format$1, { locale: locale }) } }, { children: "hotelcalendar:not_available" }), void 0);
+                jsx("div", { dangerouslySetInnerHTML: { __html: i18n.not_available.replace('{{date}}', format(dayHover.date, format$1, { locale: locale })) } }, void 0);
         }
     }
     if (null === tooltipContent) {
@@ -585,7 +586,7 @@ var Calendar = function () {
 };
 
 var HotelCalendar = function (props) {
-    var defaults = __assign(__assign({}, defaultOptions), { disabledDatesBetweenChecks: true, theme: theme });
+    var defaults = __assign(__assign({}, defaultOptions), { disabledDatesBetweenChecks: true, theme: theme, i18n: en });
     var propsWithDefault = _.defaultsDeep(__assign({}, props), defaults);
     var theme$1 = propsWithDefault.theme, disabledDatesBetweenChecks = propsWithDefault.disabledDatesBetweenChecks, disabledDates = propsWithDefault.disabledDates, locale = propsWithDefault.locale, contextProps = __rest(propsWithDefault, ["theme", "disabledDatesBetweenChecks", "disabledDates", "locale"]);
     var _a = useState(false), dayHover = _a[0], setDayHover = _a[1];

@@ -4,6 +4,7 @@ import React, { ReactElement, useRef, useState } from 'react';
 import { DefaultTheme, ThemeProvider } from 'styled-components';
 import Calendar from '../Calendar';
 import { CalendarCtx, defaultOptions, OptionCtx } from '../Store';
+import { enTranslations as en } from '../translations';
 import { CalendarContext, DayHover, HotelCalendarProps, OptionContext } from '../typings';
 import { theme as defaultTheme, Wrapper } from './styled';
 
@@ -12,6 +13,7 @@ const HotelCalendar = (props: Partial<HotelCalendarProps>): ReactElement => {
         ...defaultOptions,
         disabledDatesBetweenChecks: true,
         theme: defaultTheme,
+        i18n: en,
     };
     const propsWithDefault: HotelCalendarProps = _.defaultsDeep({ ...props }, defaults);
     const {
@@ -59,15 +61,15 @@ const HotelCalendar = (props: Partial<HotelCalendarProps>): ReactElement => {
     const mergedTheme: DefaultTheme = _.defaultsDeep(theme, defaultTheme);
 
     return (
-        <ThemeProvider theme={mergedTheme}>
-            <OptionCtx.Provider value={optionContext}>
-                <CalendarCtx.Provider value={calendarContext}>
-                    <Wrapper ref={wrapperRef}>
-                        <Calendar />
-                    </Wrapper>
-                </CalendarCtx.Provider>
-            </OptionCtx.Provider>
-        </ThemeProvider>
+            <ThemeProvider theme={mergedTheme}>
+                <OptionCtx.Provider value={optionContext}>
+                    <CalendarCtx.Provider value={calendarContext}>
+                        <Wrapper ref={wrapperRef}>
+                            <Calendar />
+                        </Wrapper>
+                    </CalendarCtx.Provider>
+                </OptionCtx.Provider>
+            </ThemeProvider>
     );
 };
 

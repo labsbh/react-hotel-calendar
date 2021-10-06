@@ -1,12 +1,10 @@
 import { format as formatDate } from 'date-fns';
 import React, { ReactElement, useContext, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
 import { CalendarCtx, OptionCtx } from '../Store';
 import { TooltipWrapper } from './styled';
 
 const Tooltip = (): ReactElement | null => {
-    const { t } = useTranslation('hotelcalendar');
-    const { hoveringTooltip: hoveringTooltipOption, format, locale } = useContext(OptionCtx);
+    const { hoveringTooltip: hoveringTooltipOption, format, locale, i18n } = useContext(OptionCtx);
     const { dayHover } = useContext(CalendarCtx);
     const [hoveringTooltip] = useState(
         hoveringTooltipOption &&
@@ -38,15 +36,15 @@ const Tooltip = (): ReactElement | null => {
     let tooltipContent = null;
 
     if (typeof hoveringTooltipOption === 'function') {
-        tooltipContent = hoveringTooltipOption(dayHover.date);
+        tooltipContent = hoveringTooltipOption(dayHover);
     } else {
 
         if (dayHover.isNoCheckIn) {
             tooltipContent =
-                <Trans t={t} values={{ date: formatDate(dayHover.date, format, { locale }) }}>hotelcalendar:no_checkin</Trans>;
+                <div dangerouslySetInnerHTML={{ __html: i18n.no_checkin.replace('{{date}}', formatDate(dayHover.date, format, { locale })) }} />;
         } else if (dayHover.isDisabled) {
             tooltipContent =
-                <Trans t={t} values={{ date: formatDate(dayHover.date, format, { locale }) }}>hotelcalendar:not_available</Trans>;
+                <div dangerouslySetInnerHTML={{__html: i18n.not_available.replace('{{date}}', formatDate(dayHover.date, format, { locale })) }} />;
         }
     }
 

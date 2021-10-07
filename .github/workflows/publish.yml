@@ -1,0 +1,56 @@
+name: "Publish version on push on main branch"
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  publish:
+    name: "Publish a new packages version"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Checkout source code"
+        uses: "actions/checkout@v2"
+        with:
+          ref: ${{ github.ref }}
+      - name: "Setup Node"
+        uses: "actions/setup-node@v1"
+        with:
+          node-version: 16
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Cache Yarn packages
+        uses: actions/cache@v1
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: yarn-
+      - name: Yarn install
+        uses: borales/actions-yarn@v2.3.0
+        with:
+          cmd: install
+      - name: eslint
+        uses: reviewdog/action-eslint@v1
+        with:
+          eslint_flags: '*/**/*.{js,ts,tsx}'
+          filter_mode: nofilter
+          fail_on_error: true
+      - name: "Automated Version Bump"
+        uses: "phips28/gh-action-bump-version@master"
+        with:
+          tag-prefix: ''
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: "Build"
+        uses: borales/actions-yarn@v2.3.0
+        with:
+          cmd: build
+      - name: "Push on npm"
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          access: 'public'

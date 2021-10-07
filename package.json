@@ -1,6 +1,6 @@
 {
   "name": "react-hotel-calendar",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "description": "A React availability calendar for hotels",
   "author": "labsbh",
@@ -100,5 +100,8 @@
   "bugs": {
     "url": "https://github.com/labsbh/react-hotel-calendar/issues"
   },
-  "homepage": "https://github.com/labsbh/react-hotel-calendar#readme"
+  "homepage": "https://github.com/labsbh/react-hotel-calendar#readme",
+  "files": [
+    "build"
+  ]
 }

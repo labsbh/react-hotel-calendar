@@ -50,7 +50,7 @@ const Calendar = (): ReactElement => {
         setIsRender(true);
     }, []);
 
-    const classes = clsx({ rendered: isRender });
+    const classes = clsx('rhc-section', { rendered: isRender });
 
     return (
         <React.Fragment>

@@ -38,11 +38,15 @@ const Wrapper = styled.section`
   }
 `;
 
-const DatePickerInner = styled.div`
+const DatePickerInner = styled.div.attrs(() => ({
+    className: 'rhc-date-picker-inner',
+}))`
   padding: ${(props): string => props.theme.calendar.padding};
 `;
 
-const Months = styled.div`
+const Months = styled.div.attrs(() => ({
+    className: 'rhc-months',
+}))`
   @media only screen and ${device.mobileL} {
     overflow: visible;
     position: relative;

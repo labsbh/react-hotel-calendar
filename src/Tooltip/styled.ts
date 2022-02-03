@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
-const TooltipWrapper = styled.div`
+const TooltipWrapper = styled.div.attrs(() => ({
+      className: 'rhc-tooltip',
+}))`
   background-color: ${(props): string => props.theme.tooltip.backgroundColor};
   border-radius: ${(props): string => props.theme.tooltip.borderRadius};
   color: ${(props): string => props.theme.tooltip.textColor};

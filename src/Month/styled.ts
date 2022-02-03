@@ -21,7 +21,9 @@ const MonthTable = styled.table<{ first: boolean }>`
   }
 `;
 
-const Caption = styled.tr`
+const Caption = styled.tr.attrs(() => ({
+    className: 'rhc-month-table_caption',
+}))`
   border-bottom: 1px solid
     ${(props): string => props.theme.months.table.borderColor};
   height: ${(props): string => props.theme.months.table.caption.height};
@@ -47,16 +49,22 @@ const NavButton = styled.span`
   }
 `;
 
-const MonthName = styled.th`
+const MonthName = styled.th.attrs(() => ({
+    className: 'rhc-month-name',
+}))`
   text-transform: uppercase;
 `;
 
-const WeekDays = styled.tr`
+const WeekDays = styled.tr.attrs(() => ({
+    className: 'rhc-weekdays',
+}))`
   height: ${(props): string => props.theme.months.table.weekDays.height};
   vertical-align: middle;
 `;
 
-const WeekDayName = styled.th`
+const WeekDayName = styled.th.attrs(() => ({
+    className: 'rhc-weekday-name',
+}))`
   font-size: ${(props): string => props.theme.months.table.weekDays.fontSize};
   font-weight: ${(props): string => props.theme.months.table.weekDays.fontSize};
   text-transform: uppercase;

@@ -12,6 +12,7 @@ const defaultOptions: OptionContext = {
     disabledDates: [],
     noCheckInDates: [],
     noCheckOutDates: [],
+    pendingDates: [],
     disabledDaysOfWeek: [],
     hoveringTooltip: true,
     moveBothMonths: true,

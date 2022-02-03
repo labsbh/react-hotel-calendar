@@ -118,6 +118,7 @@ export type DayOfMonth = {
     isFirstDisabledDate: boolean;
     isNoCheckIn: boolean;
     isNoCheckOut: boolean;
+    isPending: boolean;
 };
 
 export type DayHover = MonthDayInfos & {
@@ -134,6 +135,7 @@ export type OptionContext = {
     disabledDates: Array<Date>;
     noCheckInDates: Array<Date>;
     noCheckOutDates: Array<Date>;
+    pendingDates: Array<Date>;
     disabledDaysOfWeek: Array<number>;
     hoveringTooltip: boolean | TooltipCallback;
     moveBothMonths: boolean;
@@ -163,6 +165,7 @@ export type HotelCalendarProps = {
     disabledDates: Array<Date>;
     noCheckInDates: Array<Date>;
     noCheckOutDates: Array<Date>;
+    pendingDates: Array<Date>;
     disabledDaysOfWeek: Array<number>;
     hoveringTooltip: boolean | TooltipCallback;
     moveBothMonths: boolean;

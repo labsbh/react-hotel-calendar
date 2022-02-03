@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { addMonths, format as formatDate, isSameMonth, subMonths, } from 'date-fns';
 import React, { forwardRef, ReactElement, useCallback, useContext } from 'react';
 import MonthDay from '../Day';
@@ -20,7 +21,7 @@ const Month = forwardRef<HTMLTableElement, MonthProps>(({
     const getWeekDayNames = useCallback(
         () =>
             Array.from(Array(7).keys()).map((day) => (
-                <WeekDayName key={`day-name-${day}`} className="rhc-weekday-name">
+                <WeekDayName key={`day-name-${day}`}>
                     {locale.localize?.day(
                         (day + (locale.options?.weekStartsOn || 0)) % 7,
                         {
@@ -66,21 +67,23 @@ const Month = forwardRef<HTMLTableElement, MonthProps>(({
             ? !first && !isMonthOutOfRange(addMonths(date, 1))
             : !isMonthOutOfRange(addMonths(date, 1));
 
+    const classes = clsx('rhc-month-table', {'rhc-month-table_first': first, 'rhc-month-table_second': !first});
+
     return (
-        <MonthTable first={first} ref={ref}>
+        <MonthTable first={first} ref={ref} className={classes}>
             <thead>
             <Caption>
                 <th>
                     {showPrevious && (
-                        <NavButton onClick={goToPreviousMonth} className="rhc-previous-btn">&lt;</NavButton>
+                        <NavButton onClick={goToPreviousMonth} className="rhc-nav-button rhc-previous-btn">&lt;</NavButton>
                     )}
                 </th>
-                <MonthName colSpan={5} className="rhc-month-name">{getMonthName(date)}</MonthName>
+                <MonthName colSpan={5}>{getMonthName(date)}</MonthName>
                 <th>
-                    {showNext && <NavButton onClick={goToNextMonth} className="rhc-next-btn">&gt;</NavButton>}
+                    {showNext && <NavButton onClick={goToNextMonth} className="rhc-nav-button rhc-next-btn">&gt;</NavButton>}
                 </th>
             </Caption>
-            <WeekDays className="rhc-weekdays">{getWeekDayNames()}</WeekDays>
+            <WeekDays>{getWeekDayNames()}</WeekDays>
             </thead>
             <tbody>
             {date &&

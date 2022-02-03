@@ -109,7 +109,9 @@ const transition = `
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled.div.attrs(() => ({
+  className: 'rhc-wrapper',
+}))`
   position: relative;
 `;
 

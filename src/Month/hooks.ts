@@ -86,6 +86,7 @@ const useDayProperties = (): ((
         disabledDaysOfWeek,
         noCheckInDates,
         noCheckOutDates,
+        pendingDates,
     } = useContext(OptionCtx);
     const isValidDate = useIsValidDate();
     const getClosest = useClosest();
@@ -97,6 +98,7 @@ const useDayProperties = (): ((
             let isValid = isValidDate(date);
             let isDayBeforeDisabledDate = false;
             let isDisabled = false;
+            let isPending = false;
             let isFirstEnabledDate = false;
             let isDayOfWeekDisabled = false;
             let isNoCheckIn = false;
@@ -127,6 +129,9 @@ const useDayProperties = (): ((
                             isSameDay(disabledDate, date),
                         ) !== -1;
                     if (isDisabledDate) {
+                        if (pendingDates.filter((pendingDate) => isSameDay(pendingDate, date))) {
+                            isPending = true;
+                        }
                         isValid = false;
                         isDisabled = true;
                         consecutiveDisableDates++;
@@ -157,6 +162,9 @@ const useDayProperties = (): ((
                         isSameDay(noCheckInDate, date),
                     ) > -1
                 ) {
+                    if (pendingDates.filter((pendingDate) => isSameDay(pendingDate, date))) {
+                        isPending = true;
+                    }
                     isNoCheckIn = true;
                     isFirstEnabledDate = false;
                 }
@@ -166,6 +174,9 @@ const useDayProperties = (): ((
                         isSameDay(noCheckOutDate, date),
                     ) > -1
                 ) {
+                    if (pendingDates.filter((pendingDate) => isSameDay(pendingDate, date))) {
+                        isPending = true;
+                    }
                     isNoCheckOut = true;
                     isFirstEnabledDate = false;
                 }
@@ -184,12 +195,13 @@ const useDayProperties = (): ((
                 isDisabled,
                 isFirstEnabledDate,
                 isDayOfWeekDisabled,
+                isPending,
                 isNoCheckIn,
                 isNoCheckOut,
                 isFirstDisabledDate: consecutiveDisableDates === 1,
             };
         },
-        [startDate, isValidDate, disabledDates, disabledDaysOfWeek, noCheckInDates, noCheckOutDates, getClosest],
+        [startDate, isValidDate, disabledDates, disabledDaysOfWeek, noCheckInDates, noCheckOutDates, pendingDates, getClosest],
     );
 };
 

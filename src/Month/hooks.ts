@@ -129,7 +129,7 @@ const useDayProperties = (): ((
                             isSameDay(disabledDate, date),
                         ) !== -1;
                     if (isDisabledDate) {
-                        if (pendingDates.filter((pendingDate) => isSameDay(pendingDate, date))) {
+                        if (pendingDates.findIndex((pendingDate) => isSameDay(pendingDate, date)) !== -1) {
                             isPending = true;
                         }
                         isValid = false;
@@ -162,7 +162,7 @@ const useDayProperties = (): ((
                         isSameDay(noCheckInDate, date),
                     ) > -1
                 ) {
-                    if (pendingDates.filter((pendingDate) => isSameDay(pendingDate, date))) {
+                    if (pendingDates.findIndex((pendingDate) => isSameDay(pendingDate, date)) !== -1) {
                         isPending = true;
                     }
                     isNoCheckIn = true;
@@ -174,7 +174,7 @@ const useDayProperties = (): ((
                         isSameDay(noCheckOutDate, date),
                     ) > -1
                 ) {
-                    if (pendingDates.filter((pendingDate) => isSameDay(pendingDate, date))) {
+                    if (pendingDates.findIndex((pendingDate) => isSameDay(pendingDate, date)) !== -1) {
                         isPending = true;
                     }
                     isNoCheckOut = true;

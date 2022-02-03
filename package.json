@@ -1,6 +1,6 @@
 {
   "name": "react-hotel-calendar",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "private": false,
   "description": "A React availability calendar for hotels",
   "author": "labsbh",

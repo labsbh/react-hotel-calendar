@@ -39,10 +39,10 @@ const Tooltip = (): ReactElement | null => {
         tooltipContent = hoveringTooltipOption(dayHover);
     } else {
 
-        if (dayHover.isNoCheckIn) {
+        if (dayHover.isNoCheckIn && !dayHover.isNoCheckOut) {
             tooltipContent =
                 <div dangerouslySetInnerHTML={{ __html: i18n.no_checkin.replace('{{date}}', formatDate(dayHover.date, format, { locale })) }} />;
-        } else if (dayHover.isDisabled) {
+        } else if (dayHover.isDisabled || (dayHover.isNoCheckIn && dayHover.isNoCheckOut)) {
             tooltipContent =
                 <div dangerouslySetInnerHTML={{__html: i18n.not_available.replace('{{date}}', formatDate(dayHover.date, format, { locale })) }} />;
         }
